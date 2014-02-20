@@ -1,10 +1,9 @@
 package hasherr.floppyfish.android.core;
 
-import android.app.Activity;
 import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import hasherr.floppyfish.main.core.Game;
+import hasherr.ghostly.main.core.Game;
 
 public class MainActivity extends AndroidApplication
 {

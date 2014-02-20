@@ -1,4 +1,4 @@
-package hasherr.floppyfish.main.entity;
+package hasherr.ghostly.main.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

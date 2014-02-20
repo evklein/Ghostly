@@ -1,9 +1,9 @@
-package hasherr.floppyfish.main.entity.map;
+package hasherr.ghostly.main.entity.map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Timer;
-import hasherr.floppyfish.main.entity.Wall;
+import hasherr.ghostly.main.entity.Wall;
 
 import java.util.Random;
 

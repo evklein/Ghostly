@@ -1,7 +1,7 @@
-package hasherr.floppyfish.main.state;
+package hasherr.ghostly.main.state;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import hasherr.floppyfish.main.entity.Ghost;
+import hasherr.ghostly.main.entity.Ghost;
 
 import java.util.ArrayList;
 import java.util.List;

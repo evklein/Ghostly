@@ -1,11 +1,11 @@
-package hasherr.floppyfish.main.state;
+package hasherr.ghostly.main.state;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import hasherr.floppyfish.main.entity.Ghost;
-import hasherr.floppyfish.main.entity.Wall;
-import hasherr.floppyfish.main.entity.map.MapGenerator;
+import hasherr.ghostly.main.entity.Ghost;
+import hasherr.ghostly.main.entity.Wall;
+import hasherr.ghostly.main.entity.map.MapGenerator;
 
 /**
  * Created with IntelliJ IDEA.

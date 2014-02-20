@@ -1,12 +1,10 @@
-package hasherr.floppyfish.main.state;
+package hasherr.ghostly.main.state;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import hasherr.floppyfish.main.ui.Button;
+import hasherr.ghostly.main.ui.Button;
 
 /**
  * Created with IntelliJ IDEA.

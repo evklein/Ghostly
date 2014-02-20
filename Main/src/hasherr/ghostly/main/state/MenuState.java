@@ -1,4 +1,4 @@
-package hasherr.floppyfish.main.state;
+package hasherr.ghostly.main.state;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
