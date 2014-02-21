@@ -16,9 +16,10 @@ public class Button extends Sprite
     Action buttonAction;
     Vector2 pos;
 
-    public Button(float x, float y, Texture texture, Action buttonAction)
+    public Button(float x, float y, float width, float height, Texture texture, Action buttonAction)
     {
         pos = new Vector2(x, y);
+        setBounds(x, y, width, height);
         this.setTexture(texture);
         this.buttonAction = buttonAction;
     }

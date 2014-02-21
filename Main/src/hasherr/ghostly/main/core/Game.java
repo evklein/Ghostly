@@ -27,7 +27,7 @@ public class Game implements ApplicationListener
 
 
         batch = new SpriteBatch();
-        stateManager = new StateManager();
+        stateManager = new StateManager(camera);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class Game implements ApplicationListener
     private void adjustCameraPosition()
     {
         float cameraPositionBuffer = 125f;
-        camera.position.x = stateManager.getPlayerIfCorrectState().pos.x + cameraPositionBuffer;
+        camera.position.x = /* stateManager.getPlayerIfCorrectState().pos.x */ 9 + cameraPositionBuffer;
     }
 
     @Override

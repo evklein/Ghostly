@@ -1,5 +1,6 @@
 package hasherr.ghostly.main.state;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import hasherr.ghostly.main.entity.Ghost;
 
@@ -14,10 +15,10 @@ import java.util.List;
 public class StateManager
 {
     List<State> currentStates;
-    public StateManager()
+    public StateManager(OrthographicCamera camera)
     {
         currentStates = new ArrayList<State>();
-        currentStates.add(new GameState()); // temporary.
+        currentStates.add(new PauseState(camera)); // temporary.
     }
 
     public void render(SpriteBatch batch)
@@ -38,7 +39,7 @@ public class StateManager
         }
         else
         {
-            throw new IllegalStateException("You are in the incorrect game state for this operation.");
+            return null;
         }
     }
 
