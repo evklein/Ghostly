@@ -7,9 +7,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * User: Evan
  * Date: 2/10/14
  */
-public interface State
+public abstract class State
 {
-    public void render(SpriteBatch batch);
-    public void update();
+    boolean isReadyForSwitchAway = false;
+
+    public abstract void render(SpriteBatch batch);
+    public abstract void update();
+    public abstract void prepareForSwitchAway();
+
+
+    public boolean isReadyForSwitchAway()
+    {
+        return isReadyForSwitchAway;
+    }
 }
 

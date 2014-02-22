@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * User: Evan
  * Date: 2/17/14
  */
-public class MenuState implements State
+public class MenuState extends State
 {
 
     @Override
@@ -18,6 +18,12 @@ public class MenuState implements State
 
     @Override
     public void update()
+    {
+
+    }
+
+    @Override
+    public void prepareForSwitchAway()
     {
 
     }

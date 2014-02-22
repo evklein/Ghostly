@@ -1,5 +1,6 @@
 package hasherr.ghostly.main.state;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import hasherr.ghostly.main.entity.Ghost;
@@ -15,32 +16,48 @@ import java.util.List;
 public class StateManager
 {
     List<State> currentStates;
+    float lastPosition;
+    OrthographicCamera camera;
+
     public StateManager(OrthographicCamera camera)
     {
         currentStates = new ArrayList<State>();
-        currentStates.add(new PauseState(camera)); // temporary.
+        currentStates.add(new GameState()); // temporary.
+        this.camera = camera;
     }
 
     public void render(SpriteBatch batch)
     {
-        getCurrentState().render(batch);
+        for (State gameState : currentStates)
+        {
+            for (State state : currentStates)
+            {
+                state.render(batch);
+            }
+        }
     }
 
     public void update()
     {
         getCurrentState().update();
+
+        // If the currently updating state is ready to be switched, remove it from the list of current states.
+        if (getCurrentState().isReadyForSwitchAway())
+        {
+            State oldState = getCurrentState();
+            oldState.prepareForSwitchAway();
+            currentStates.add(new DeathState(camera, ((GameState) oldState).getSetXPosition()));
+        }
     }
 
-    public Ghost getPlayerIfCorrectState() throws IllegalStateException
+    public float getCorrectCameraPosition()
     {
         if (getCurrentState() instanceof GameState)
         {
-            return ((GameState) getCurrentState()).playerGhost;
+            lastPosition = ((GameState) getCurrentState()).playerGhost.pos.x;
         }
-        else
-        {
-            return null;
-        }
+
+        return lastPosition;
     }
 
     public State getCurrentState()

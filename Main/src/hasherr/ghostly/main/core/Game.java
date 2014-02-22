@@ -16,7 +16,7 @@ public class Game implements ApplicationListener
 {
     OrthographicCamera camera;
     SpriteBatch batch;
-    StateManager stateManager;
+    public static StateManager stateManager;
 
     @Override
     public void create()
@@ -55,7 +55,7 @@ public class Game implements ApplicationListener
     private void adjustCameraPosition()
     {
         float cameraPositionBuffer = 125f;
-        camera.position.x = /* stateManager.getPlayerIfCorrectState().pos.x */ 9 + cameraPositionBuffer;
+        camera.position.x = stateManager.getCorrectCameraPosition() + cameraPositionBuffer;
     }
 
     @Override
