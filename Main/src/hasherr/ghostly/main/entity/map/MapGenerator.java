@@ -3,7 +3,9 @@ package hasherr.ghostly.main.entity.map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Timer;
+import hasherr.ghostly.main.core.Game;
 import hasherr.ghostly.main.entity.Wall;
+import hasherr.ghostly.main.state.StateManager;
 
 import java.util.Random;
 
@@ -21,7 +23,7 @@ public class MapGenerator
 
     public MapGenerator()
     {
-        wallTexture = new Texture(Gdx.files.internal("sprites/wall.png"));
+        wallTexture = StateManager.wallTexture;
         wallPosition = 500f;
         wallMeasurementGenerator = new Random();
 

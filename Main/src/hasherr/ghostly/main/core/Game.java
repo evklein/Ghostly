@@ -2,8 +2,10 @@ package hasherr.ghostly.main.core;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import hasherr.ghostly.main.state.StateManager;
 
@@ -16,7 +18,7 @@ public class Game implements ApplicationListener
 {
     OrthographicCamera camera;
     SpriteBatch batch;
-    public static StateManager stateManager;
+    StateManager stateManager;
 
     @Override
     public void create()
@@ -25,9 +27,10 @@ public class Game implements ApplicationListener
         camera.setToOrtho(false, 480, 800);
         camera.update();
 
-
         batch = new SpriteBatch();
+
         stateManager = new StateManager(camera);
+        stateManager.updateBal();
     }
 
     @Override
@@ -73,12 +76,12 @@ public class Game implements ApplicationListener
     @Override
     public void pause()
     {
-
+        stateManager.switchToPauseState();
     }
 
     @Override
     public void resume()
     {
-
+        Gdx.app.log("Debug1", "YEAH THIS JUST GOT CALLED");
     }
 }

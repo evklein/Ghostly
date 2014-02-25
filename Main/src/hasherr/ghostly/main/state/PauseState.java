@@ -34,7 +34,7 @@ public class PauseState extends State
     @Override
     public void update()
     {
-
+        Gdx.app.log("Debug1", "PauseState is in use!!!");
     }
 
     @Override

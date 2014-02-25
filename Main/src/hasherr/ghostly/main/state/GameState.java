@@ -21,9 +21,9 @@ public class GameState extends State
 
     public GameState()
     {
-        playerGhost = new Ghost(0f, 0f, 64f, 64f, new Texture(Gdx.files.internal("sprites/ghost.png")));
+        playerGhost = new Ghost(0f, 0f, 64f, 64f, StateManager.ghostTexture);
         mapGenerator = new MapGenerator();
-        background = new Texture(Gdx.files.internal("sprites/background.png"));
+        background = StateManager.backgroundTexture;
     }
 
     @Override

@@ -43,8 +43,8 @@ public class DeathState extends State
                 return true;
             }
         };
-        replayButton = new Button(position, 500f, 256f, 128f, new Texture(Gdx.files.internal("sprites/ui/replay_button.png")), replayButtonAction);
-        menuButton = new Button(position, 300f, 256f, 128f, new Texture(Gdx.files.internal("sprites/ui/main_menu_button.png")), menuButtonAction);
+        replayButton = new Button(position, 500f, 256f, 128f, StateManager.replayButtonTexture, replayButtonAction);
+        menuButton = new Button(position, 300f, 256f, 128f, StateManager.menuButtonTexture, menuButtonAction);
     }
 
     @Override
@@ -57,7 +57,6 @@ public class DeathState extends State
     @Override
     public void update()
     {
-        Gdx.app.log("Debug1", "LOL LOL LOL");
         resetTouchPosition();
         handleInput(touchPos);
     }
