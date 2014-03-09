@@ -6,7 +6,7 @@ Ghostly is a helicopter clone written using Java with the LibGDX framework. You 
 Story 
 =====
 
-Henry the Ghost has a big problem. He, unlike his Ghost pals, cannot go through walls! Instead, he must carefully navigate through gaps in the walls without hitting them to ensure that he gets to where he needs to go. Help Henry get to his destination without hitting the slime walls!
+You play as a ghost who, unlike the rest of the ghosts, lacks the ability to move through walls. You must navigate him through each wall to try and get the highest score.
 
 Modules & Directories 
 ====
