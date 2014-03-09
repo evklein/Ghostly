@@ -28,7 +28,4 @@ public abstract class Entity
         boundingBox.width = width;
         boundingBox.height = height;
     }
-
-    public float getWidth() { return width; }
-    public float getHeight() { return height; }
 }

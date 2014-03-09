@@ -2,7 +2,9 @@ package hasherr.ghostly.main.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -15,6 +17,10 @@ public class Ghost extends Entity
 {
     Vector2 velocity;
     float gravity;
+    TextureRegion[] animationFrames;
+    TextureRegion currentFrame;
+    Animation animation;
+    float stateTime;
     boolean canJump;
     float score;
 
@@ -22,7 +28,9 @@ public class Ghost extends Entity
     {
         pos = new Vector2(x, y);
         boundingBox = new Rectangle(x, y, width, height);
-        texture = sprite;
+
+        // Animation variables.
+        setUpAnimationFrames(sprite);
 
         this.width = width;
         this.height = height;
@@ -34,24 +42,39 @@ public class Ghost extends Entity
         score = 0f;
     }
 
+    private void setUpAnimationFrames(Texture sprite)
+    {
+        // Split the texture into multiple pieces and distribute them into an array for animation use.
+        TextureRegion[][] region = TextureRegion.split(sprite, sprite.getWidth() / 2, sprite.getHeight());
+        animationFrames = new TextureRegion[2];
+        animationFrames[0] = region[0][0];
+        animationFrames[1] = region[0][1];
+
+        // Create the new animation and give it a time frame of animating ever 1/4 seconds.
+        animation = new Animation(0.25f, animationFrames);
+        stateTime = 0f;
+        currentFrame = animation.getKeyFrame(stateTime, true);
+    }
+
     @Override
     public void render(SpriteBatch batch)
     {
-        batch.draw(texture, pos.x, pos.y);
+        batch.draw(currentFrame, pos.x, pos.y);
     }
 
     @Override
     public void update()
     {
+        currentFrame = animation.getKeyFrame(stateTime, true);
+        stateTime += Gdx.graphics.getDeltaTime();
+
         updateBoundingBox();
         handlePlayerInput();
 
         velocity.y += gravity; // Force y-axis gravity onto player at all times.
         pos.x += velocity.x * Gdx.graphics.getDeltaTime(); // Push the player forward at a constant rate.
         pos.y += velocity.y * Gdx.graphics.getDeltaTime();
-
         handleFloorAndCeilingCollision();
-        handleWallCollision();
     }
 
     private void handlePlayerInput()
@@ -82,26 +105,4 @@ public class Ghost extends Entity
         }
     }
 
-    private void handleWallCollision()
-    {
-        for (int i=0; i<Wall.allWalls.size(); i++)
-        {
-            Wall wall = Wall.allWalls.get(i);
-            if (boundingBox.overlaps(wall.boundingBox))
-            {
-                gravity = -120f; // Sink the player.
-                velocity.x = 0f;
-            }
-        }
-    }
-
-    public void reset()
-    {
-        score = 0;
-    }
-
-    public void updateScore()
-    {
-        score += 1f;
-    }
 }

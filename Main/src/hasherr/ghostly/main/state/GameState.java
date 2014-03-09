@@ -2,8 +2,9 @@ package hasherr.ghostly.main.state;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import hasherr.ghostly.main.core.Game;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import hasherr.ghostly.main.entity.Ghost;
 import hasherr.ghostly.main.entity.Wall;
 import hasherr.ghostly.main.entity.map.MapGenerator;
@@ -15,43 +16,71 @@ import hasherr.ghostly.main.entity.map.MapGenerator;
  */
 public class GameState extends State
 {
+    StateManager managerToRespondTo;
+    boolean isReadyForSwitchAway;
     Ghost playerGhost;
+    BitmapFont scoreFont;
     MapGenerator mapGenerator;
     Texture background;
+    int score;
 
-    public GameState()
+    float lastPosition;
+
+    public GameState(StateManager managerToRespondTo)
     {
-        playerGhost = new Ghost(0f, 0f, 64f, 64f, StateManager.ghostTexture);
+        this.managerToRespondTo = managerToRespondTo;
+        isReadyForSwitchAway = false;
+
+        // Create game assets and objects.
+        playerGhost = new Ghost(0f, 0f, 64f, 64f, new Texture(Gdx.files.internal("sprites/ghost_sheet.png")));
+        scoreFont = new BitmapFont(Gdx.files.internal("fonts/score_font.fnt"), new TextureRegion(new Texture(Gdx.files.internal("fonts/score_font_0.png"))));
         mapGenerator = new MapGenerator();
-        background = StateManager.backgroundTexture;
+        background = new Texture(Gdx.files.internal("sprites/background.png"));
+        score = 0;
     }
 
     @Override
     public void render(SpriteBatch batch)
     {
         batch.draw(background, playerGhost.pos.x - 125f, 0f);
+        renderWalls(batch);
+        renderScore(batch);
+    }
+
+    private void renderWalls(SpriteBatch batch)
+    {
         for (int i = 0; i < Wall.allWalls.size(); i++) // Render all existing walls.
         {
             Wall wall = Wall.allWalls.get(i);
             wall.render(batch);
         }
+    }
+
+    private void renderScore(SpriteBatch batch)
+    {
+        int scoreToShow = score / 2;
+        scoreFont.setScale(4f, 4f);
+        scoreFont.draw(batch, "" + scoreToShow, (float) Math.floor(playerGhost.pos.x + 100f), 600f);
         playerGhost.render(batch);
     }
 
     @Override
     public void update()
     {
+        updateAllExistingWalls();
+        playerGhost.update();
+        checkForPlayerDeath();
+        updatePlayerScore();
+    }
+
+    private void updateAllExistingWalls()
+    {
         for (int i = 0; i < Wall.allWalls.size(); i++) // Update all existing walls.
         {
             // Update the wall.
             Wall wall = Wall.allWalls.get(i);
             wall.update();
-
-            // Check to see if the player has made it past a wall.
-            updatePlayerScore(wall);
         }
-        playerGhost.update();
-        checkForPlayerDeath();
     }
 
     public void checkForPlayerDeath()
@@ -60,25 +89,30 @@ public class GameState extends State
         {
             if (playerGhost.boundingBox.overlaps(wall.boundingBox))
             {
-                isReadyForSwitchAway = true;
+                lastPosition = playerGhost.pos.x;
+                mapGenerator.stopGeneration();
+                managerToRespondTo.switchToDeathState();
             }
         }
     }
 
-    private void updatePlayerScore(Wall wallToPass)
+    private void updatePlayerScore()
     {
         // Check to see if the player cleared the wall. If he did, add 1 to his score.
-        if (playerGhost.pos.x + playerGhost.width > wallToPass.pos.x + wallToPass.width)
+        for (int i=0; i<Wall.wallsNotPassed.size(); i++)
         {
-            playerGhost.updateScore();
+            Wall wallToPass = Wall.wallsNotPassed.get(i);
+            if (playerGhost.pos.x + playerGhost.width > wallToPass.pos.x + wallToPass.width)
+            {
+                score++;
+                Wall.wallsNotPassed.remove(i);
+            }
         }
     }
 
-
-    @Override
-    public void prepareForSwitchAway()
+    public int getScore()
     {
-
+        return score / 2;
     }
 
     public float getSetXPosition()

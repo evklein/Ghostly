@@ -9,16 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public abstract class State
 {
-    boolean isReadyForSwitchAway = false;
-
     public abstract void render(SpriteBatch batch);
     public abstract void update();
-    public abstract void prepareForSwitchAway();
-
-
-    public boolean isReadyForSwitchAway()
-    {
-        return isReadyForSwitchAway;
-    }
 }
 

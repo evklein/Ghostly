@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import hasherr.ghostly.main.entity.Wall;
 import hasherr.ghostly.main.state.StateManager;
 
 /**
@@ -30,7 +31,6 @@ public class Game implements ApplicationListener
         batch = new SpriteBatch();
 
         stateManager = new StateManager(camera);
-        stateManager.updateBal();
     }
 
     @Override
@@ -41,12 +41,12 @@ public class Game implements ApplicationListener
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
+        stateManager.update();
+
         batch.begin();
         adjustCameraPosition();     // Set the camera's position as close to the rendering as
         stateManager.render(batch); // possible so that the camera doesn't lag behind the player.
         batch.end();
-
-        stateManager.update();
     }
 
     private void clearScreen()
@@ -70,18 +70,24 @@ public class Game implements ApplicationListener
     @Override
     public void resize(int width, int height)
     {
-
+        // UNUSED: resize(int, int) is never called on Android.
     }
 
     @Override
     public void pause()
     {
-        stateManager.switchToPauseState();
+        resetGame();
     }
 
     @Override
     public void resume()
     {
-        Gdx.app.log("Debug1", "YEAH THIS JUST GOT CALLED");
+        resetGame();
+    }
+
+    private void resetGame()
+    {
+        create();
+        Wall.allWalls.clear();
     }
 }

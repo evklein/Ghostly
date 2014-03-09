@@ -1,12 +1,8 @@
 package hasherr.ghostly.main.state;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import hasherr.ghostly.main.entity.Ghost;
-
+import hasherr.ghostly.main.entity.Wall;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,35 +16,13 @@ public class StateManager
     List<State> currentStates;
     float lastPosition;
     OrthographicCamera camera;
-    AssetManager assetManager;
-    boolean isLoading;
-    boolean isReady;
-
-    // In-use textures.
-    public static Texture backgroundTexture;
-    public static Texture ghostTexture;
-    public static Texture wallTexture;
-    public static Texture replayButtonTexture;
-    public static Texture menuButtonTexture;
 
     public StateManager(OrthographicCamera camera)
     {
-        isLoading = true;
-        isReady = false;
         currentStates = new ArrayList<State>();
-        assetManager = new AssetManager();
         this.camera = camera;
-        loadTextures();
-        while (!assetManager.update());
-        if (!isLoading && assetManager.update())
-        {
-            Gdx.app.log("Debug1", "Assets loaded, update() == true");
-            isLoading = true;
-            finishLoading();
-            currentStates.add(new GameState()); // temporary.
 
-            isReady = true;
-        }
+        currentStates.add(new MenuState(this, camera));
     }
 
     public void render(SpriteBatch batch)
@@ -61,97 +35,60 @@ public class StateManager
 
     public void update()
     {
-        Gdx.app.log("Debug1", "Okay, we're not there yet.");
-        if (assetManager.update())
+        State currentState = getCurrentState();
+        currentState.update();
+
+        if (currentState instanceof GameState)
         {
-            Gdx.app.log("Debug1", "Okay, we're where we want to be.");
-            getCurrentState().update();
-
-            // If the currently updating state is ready to be switched, remove it from the list of current states.
-
+            if (((GameState) currentState).isReadyForSwitchAway)
+            {
+                switchToDeathState();
+            }
         }
-    }
-
-    private void loadTextures()
-    {
-        String[] textureStrings = { "sprites/background.png",
-                                    "sprites/ghost.png",
-                                    "sprites/wall.png",
-                                    "sprites/ui/replay_button.png",
-                                    "sprites/ui/main_menu_button.png"
-                                  };
-
-        for (String textureString : textureStrings)
-        {
-            assetManager.load(textureString, Texture.class);
-        }
-
-        isLoading = false;
-        Gdx.app.log("Debug1", "TEXTURES LOADED");
-    }
-
-    // Load the textures into memory.
-    private void finishLoading()
-    {
-        backgroundTexture = assetManager.get("sprites/background.png", Texture.class);
-        ghostTexture = assetManager.get("sprites/ghost.png", Texture.class);
-        wallTexture = assetManager.get("sprites/wall.png", Texture.class);
-        replayButtonTexture = assetManager.get("sprites/ui/replay_button.png", Texture.class);
-        menuButtonTexture = assetManager.get("sprites/ui/main_menu_button.png", Texture.class);
     }
 
     // Switches from the GameState to the DeathState.
     public void switchToDeathState()
     {
-        State currentGameState = getCurrentState();
-        currentGameState.prepareForSwitchAway();
-        currentStates.add(new DeathState(camera, ((GameState) currentGameState).getSetXPosition()));
-    }
-
-    // Switches from the GameState to the PauseState.
-    public void switchToPauseState()
-    {
-        getCurrentState().prepareForSwitchAway();
-        currentStates.add(new DeathState(camera, ((GameState) getCurrentState()).getSetXPosition()));
+        currentStates.add(new DeathState(this, camera, camera.position.x - 125f, ((GameState) getCurrentState()).getScore()));
     }
 
     // Switches from the MenuState to the PauseState.
     public void switchToGameState()
     {
-
+        resetForNewState();
+        currentStates.add(new GameState(this));
     }
 
     // Switches from PauseState/DeathState to the MenuState.
     public void switchToMenuState()
     {
+        resetForNewState();
+        currentStates.add(new MenuState(this, camera));
+    }
 
+    private void resetForNewState()
+    {
+        Wall.allWalls.clear();
+        Wall.wallsNotPassed.clear();
+        currentStates.clear();
     }
 
     public float getCorrectCameraPosition()
     {
         if (getCurrentState() instanceof GameState)
         {
-            lastPosition = ((GameState) getCurrentState()).playerGhost.pos.x;
+            lastPosition = ((GameState) getCurrentState()).getSetXPosition();
         }
 
         return lastPosition;
     }
 
+    // Gets the last state in the index for rendering and updating purposes.
     public State getCurrentState()
     {
-        if (assetManager.update())
-        {
-            State currentState = currentStates.get(currentStates.size() - 1);
-            return currentState;
-        }
-
-        return null;
-    }
-
-
-    public void updateBal()
-    {
-        assetManager.update();
+        State currentState = currentStates.get(currentStates.size() - 1);
+        return currentState;
     }
 }
 

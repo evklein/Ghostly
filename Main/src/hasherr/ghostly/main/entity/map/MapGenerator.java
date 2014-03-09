@@ -3,9 +3,7 @@ package hasherr.ghostly.main.entity.map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Timer;
-import hasherr.ghostly.main.core.Game;
 import hasherr.ghostly.main.entity.Wall;
-import hasherr.ghostly.main.state.StateManager;
 
 import java.util.Random;
 
@@ -16,16 +14,17 @@ import java.util.Random;
  */
 public class MapGenerator
 {
-    public static Timer wallSpawnTimer;
+    Timer wallSpawnTimer;
     Texture wallTexture;
     float wallPosition;
     Random wallMeasurementGenerator;
 
     public MapGenerator()
     {
-        wallTexture = StateManager.wallTexture;
-        wallPosition = 500f;
+        wallTexture = new Texture(Gdx.files.internal("sprites/wall.png"));
         wallMeasurementGenerator = new Random();
+
+        wallPosition = 500f; // Set the first wall to be just off the screen.
 
         Timer.Task wallSpawnTimerTask = new Timer.Task()
         {
@@ -36,7 +35,7 @@ public class MapGenerator
             }
         };
         wallSpawnTimer = new Timer();
-        wallSpawnTimer.schedule(wallSpawnTimerTask, 1f, 1f); // Spawn a new wall every second.
+        wallSpawnTimer.scheduleTask(wallSpawnTimerTask, 1f, 1f); // Spawn a new wall every second.
         wallSpawnTimer.start();
     }
 
@@ -52,12 +51,18 @@ public class MapGenerator
     {
         float holeDistance = 170f;
         float gapDistance = 330f;
-        float bottomWallPosition = calculateBottomWallPosition(-770, -300);
+        float bottomWallPosition = calculateBottomWallPosition(-720, -300);
 
         wallPosition += gapDistance;
 
         // Instantiate the wall objects so that they go partially off the screen.
         new Wall(wallPosition, bottomWallPosition, 100f, 800f, wallTexture); // Bottom wall.
-        new Wall(wallPosition, bottomWallPosition + 800 + holeDistance, 100f, 800f, wallTexture); // Top wall.
+        new Wall(wallPosition, bottomWallPosition + 800f + holeDistance, 100f, 800f, wallTexture); // Top wall.
+    }
+
+    public void stopGeneration()
+    {
+        wallSpawnTimer.stop();
+        wallSpawnTimer.clear();
     }
 }

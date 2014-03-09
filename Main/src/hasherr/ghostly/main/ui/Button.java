@@ -13,8 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.Action;
  */
 public class Button extends Sprite
 {
+    public Vector2 pos;
     Action buttonAction;
-    Vector2 pos;
 
     public Button(float x, float y, float width, float height, Texture texture, Action buttonAction)
     {

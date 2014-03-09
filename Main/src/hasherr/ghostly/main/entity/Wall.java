@@ -16,7 +16,7 @@ import java.util.List;
 public class Wall extends Entity
 {
     public static List<Wall> allWalls = new ArrayList<Wall>();
-    boolean isEligibleForGarbageCollection;
+    public static List<Wall> wallsNotPassed = new ArrayList<Wall>();
 
     public Wall(float x, float y, float width, float height, Texture sprite)
     {
@@ -26,10 +26,10 @@ public class Wall extends Entity
         texture = sprite;
 
         this.width = width;
-             this.height = height;
+        this.height = height;
 
         allWalls.add(this);
-        isEligibleForGarbageCollection = false;
+        wallsNotPassed.add(this);
     }
 
     @Override
@@ -42,17 +42,5 @@ public class Wall extends Entity
     public void update()
     {
         updateBoundingBox();
-
-        if (isEligibleForGarbageCollection)
-        {
-            Wall.allWalls.remove(this);
-        }
-    }
-
-
-
-    public void setEligibleForGarbageCollection()
-    {
-        isEligibleForGarbageCollection = true;
     }
 }

@@ -19,8 +19,8 @@ public class MainActivity extends AndroidApplication
         configuration.useGL20 = true;
         configuration.useAccelerometer = false;
         configuration.useCompass = false;
+        configuration.useWakelock = true;
 
         initialize(new Game(), configuration);
-
     }
 }
